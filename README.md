@@ -13,6 +13,9 @@ Features:
 
 Note: "Eye" button to show your passphrase, need to right-click. Wondering why Microsoft blocks left-click event for Powershell.
 
+Installation:
+Install-Script -Name PsPigeon
+
 Screenshots:
 
 ![image](https://user-images.githubusercontent.com/57880343/205448513-85701f59-37ab-4578-8ae3-e24cde2c419a.png)
