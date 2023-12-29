@@ -575,10 +575,13 @@ function Hide-Console {
     [Console.Window]::ShowWindow($consolePtr, 0) | out-null
 }
 
-if ($ShowConsole.IsPresent) {
-    Show-Console
+if ($host.name -ne "ConsoleHost") {
+    $null = $syncHash.window.Dispatcher.InvokeAsync{$syncHash.Window.ShowDialog()}.Wait()
 } else {
-    Hide-Console
+    if ($ShowConsole.IsPresent) {
+        Show-Console
+    } else {
+        Hide-Console
+    }
+    $syncHash.window.ShowDialog() | Out-Null
 }
-
-$syncHash.window.ShowDialog() | Out-Null
