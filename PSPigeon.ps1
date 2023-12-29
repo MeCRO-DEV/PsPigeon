@@ -44,7 +44,7 @@
 ############################################################################
 #Requires -Version 5.0
 param (
-    [switch] $ShowConsole = $false
+    [switch] $ShowConsole
 )
 Set-StrictMode -Version Latest
 

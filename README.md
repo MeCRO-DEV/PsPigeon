@@ -11,7 +11,12 @@ Features:
 - Light weight WPF, using .Net AES augorithm
 - Easy to use
 
-Note: "Eye" button to show your passphrase, need to right-click. Wondering why Microsoft blocks left-click event for Powershell.
+Usage:
+- PsPigion [-ShowConsole]
+
+Note: 
+1. "Eye" button to show your passphrase, need to right-click. Wondering why Microsoft blocks left-click event for Powershell.
+2. To show keep Powershell console open, please add -ShowConsole switch, otherwise the console will be closed.
 
 Installation:
 Install-Script -Name PsPigeon
