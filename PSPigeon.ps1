@@ -1,5 +1,5 @@
 <#PSScriptInfo
-.VERSION 1.8
+.VERSION 1.9
 .GUID 0f9b378a-a4a6-4261-b7af-4efeb1d458b4
 .AUTHOR David Wang
 .COMPANYNAME MeCRO
@@ -21,11 +21,11 @@
 #>
 ############################################################################
 # PsPigeon (Pigeon Powershell Version)
-# (C) David Wang, DEC 2022
+# (C) David Wang, DEC 2023
 ############################################################################
 # The MIT License (MIT)
 #
-# Copyright (c) 2022, David Wang
+# Copyright (c) 2024, David Wang
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
 # associated documentation files (the "Software"), to deal in the Software without restriction, 
