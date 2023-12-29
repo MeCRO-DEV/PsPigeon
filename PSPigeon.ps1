@@ -1,6 +1,27 @@
+<#PSScriptInfo
+.VERSION 1.8
+.GUID 0f9b378a-a4a6-4261-b7af-4efeb1d458b4
+.AUTHOR David Wang
+.COMPANYNAME MeCRO
+.COPYRIGHT David Wang
+.TAGS
+.LICENSEURI https://raw.githubusercontent.com/MeCRO-DEV/PSPigeon/main/LICENSE
+.PROJECTURI https://github.com/MeCRO-DEV/PsPigeon
+.ICONURI
+.EXTERNALMODULEDEPENDENCIES
+.REQUIREDSCRIPTS
+.EXTERNALSCRIPTDEPENDENCIES
+.RELEASENOTES
+#>
+
+<#
+.DESCRIPTION
+ PsPigeon - Securing Your Messages.
+#
+#>
 ############################################################################
 # PsPigeon (Pigeon Powershell Version)
-# (C) David Wang, Oct 2022
+# (C) David Wang, DEC 2022
 ############################################################################
 # The MIT License (MIT)
 #
@@ -22,6 +43,9 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ############################################################################
 #Requires -Version 5.0
+param (
+    [switch] $ShowConsole = $false
+)
 Set-StrictMode -Version Latest
 
 # UI XAML
@@ -334,6 +358,7 @@ $syncHash.Gui.btEyePng.source  = $pngEye
 $syncHash.Gui.icoPigeon.source = $icoPigeon
 $syncHash.Gui.tbCount.text = $syncHash.Gui.tbOutput.text.Length.ToString()
 
+$syncHash.wsh = New-Object -ComObject WScript.Shell
 $syncHash.awake = {
     $syncHash.wsh.SendKeys('+{F15}')
 }
@@ -535,15 +560,25 @@ $syncHash.Gui.btAbout.Add_Click({
     }
 })
 
-# $syncHash.window.ShowDialog() | Out-Null
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+    [DllImport("Kernel32.dll")] public static extern IntPtr GetConsoleWindow();
+    [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
 
-if ($host.name -ne "ConsoleHost")
-{
-    $null = $syncHash.window.Dispatcher.InvokeAsync{$syncHash.Window.ShowDialog()}.Wait()
-} else {
-    $windowcode = '[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);'
-    $asyncwindow = Add-Type -MemberDefinition $windowcode -Name Win32ShowWindowAsync -Namespace Win32Functions -PassThru
-    $null = $asyncwindow::ShowWindowAsync((Get-Process -PID $pid).MainWindowHandle, 0)
-    $app = New-Object -TypeName Windows.Application
-    $app.Run($syncHash.Window)
+function Show-Console {
+    $consolePtr = [Console.Window]::GetConsoleWindow()
+    [Console.Window]::ShowWindow($consolePtr, 5) | out-null
 }
+
+function Hide-Console {
+    $consolePtr = [Console.Window]::GetConsoleWindow()
+    [Console.Window]::ShowWindow($consolePtr, 0) | out-null
+}
+
+if ($ShowConsole.IsPresent) {
+    Show-Console
+} else {
+    Hide-Console
+}
+
+$syncHash.window.ShowDialog() | Out-Null
