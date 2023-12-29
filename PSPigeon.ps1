@@ -1,5 +1,5 @@
 <#PSScriptInfo
-.VERSION 1.9
+.VERSION 2.0
 .GUID 0f9b378a-a4a6-4261-b7af-4efeb1d458b4
 .AUTHOR David Wang
 .COMPANYNAME MeCRO
