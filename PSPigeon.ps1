@@ -291,8 +291,8 @@ Set-StrictMode -Version Latest
                 
                 <StackPanel Orientation="Horizontal">
                     <Canvas Width="345" Height="25" Margin="10,5,0,0">
-                        <PasswordBox x:Name="pbPassPhrase" Width="430" Height="25" Margin="0,0,0,0" Foreground="Blue" Background="Gray" FontSize="18" FontWeight="Medium" FontFamily="Courier New" HorizontalAlignment="Left" Visibility="Visible" MaxLength="256" VerticalAlignment="center" />
-                        <TextBox     x:Name="tbPassPhrase" Width="430" Height="25" Margin="0,0,0,0" Foreground="White" Background="Gray" FontSize="18" FontWeight="Medium" FontFamily="Courier New" HorizontalAlignment="Left" Visibility="Hidden"  MaxLength="256" VerticalAlignment="center" />
+                        <PasswordBox x:Name="pbPassPhrase" Width="430" Height="25" Margin="0,0,0,0" Foreground="Cyan" Background="Black" FontSize="18" FontWeight="Medium" FontFamily="Courier New" HorizontalAlignment="Left" Visibility="Visible" MaxLength="256" VerticalAlignment="center" />
+                        <TextBox     x:Name="tbPassPhrase" Width="430" Height="25" Margin="0,0,0,0" Foreground="Yellow" Background="Black" FontSize="18" FontWeight="Medium" FontFamily="Courier New" HorizontalAlignment="Left" Visibility="Hidden"  MaxLength="256" VerticalAlignment="center" />
                     </Canvas>
                     <Button x:Name="btEye" Width="25" Height="25" Margin="90,0,0,0" VerticalAlignment="Bottom" ToolTip="Right click to vew passphrase">
                         <Button.Style>
@@ -319,7 +319,7 @@ Set-StrictMode -Version Latest
                 <TextBox x:Name="tbOutput" Text="PSPigeon, securing your messages." FontFamily="Courier New" FontSize="16" HorizontalAlignment="Left" Height="300" Margin="10,5,0,0" VerticalAlignment="Top" Width="460" Background="Black" Foreground="Lime" IsReadOnly="False" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" MaxWidth="10000" TextWrapping="Wrap" AcceptsReturn="True"/>
                 <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="tbCount" Text="" Width="100" Margin="10,10,0,0" Foreground="White" FontSize="12" FontWeight="Light" FontFamily="Courier New"/>
-                <TextBlock x:Name="tbCopyright" Text="(C) MeCRO 2022" Margin="260,10,0,0" Foreground="White" FontSize="12" FontWeight="Light" FontFamily="Courier New"/>
+                <TextBlock x:Name="tbCopyright" Text="(C) MeCRO 2024" Margin="260,10,0,0" Foreground="White" FontSize="12" FontWeight="Light" FontFamily="Courier New"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
