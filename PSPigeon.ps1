@@ -21,7 +21,7 @@
 #>
 ############################################################################
 # PsPigeon (Pigeon Powershell Version)
-# (C) David Wang, DEC 2023
+# (C) David Wang, Sep 2024
 ############################################################################
 # The MIT License (MIT)
 #
@@ -55,7 +55,7 @@ Set-StrictMode -Version Latest
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Pigeon"
-    Title="MainWindow" Height="500" Width="500"
+    Title="PsPigeon" Height="500" Width="500"
     WindowStyle="None"
     WindowStartupLocation="CenterScreen"
     ResizeMode="NoResize"
@@ -160,7 +160,7 @@ Set-StrictMode -Version Latest
                     <TextBlock Foreground="BurlyWood" FontSize="14" FontWeight="Light" FontFamily="Courier New" TextWrapping="Wrap" Margin="25,5,0,0" Width="140">
                         <Run Text="Block  Size: 128"/>
                         <LineBreak/>
-                        <Run Text="Cypher Mode: CCM"/>
+                        <Run Text="Cypher Mode: CBC"/>
                     </TextBlock>
                     <TextBlock Foreground="Honeydew" FontSize="14" FontWeight="Light" FontFamily="Courier New" TextWrapping="Wrap" Margin="25,5,0,0" Width="160">
                         <Run Text="Encoding : Base64"/>
@@ -436,9 +436,9 @@ Add-Type -TypeDefinition $Source
 Function EncryptToBase64([string]$pText, [string]$mima)
 {
     $tBytes = [System.Text.Encoding]::UTF8.GetBytes($pText)
-    [byte[]]$tHash = [System.Security.Cryptography.MD5]::Create().ComputeHash($tBytes)
+    [byte[]]$tHash = [System.Security.Cryptography.SHA256]::Create().ComputeHash($tBytes)
     [System.Security.Cryptography.SymmetricAlgorithm]$mm = [System.Security.Cryptography.Aes]::Create()
-    $mm.Key = [System.Security.Cryptography.MD5]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($mima))
+    $mm.Key = [System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($mima))
     $mm.IV  = [byte[]]::new(16)
     [System.IO.MemoryStream]$ms = New-Object System.IO.MemoryStream
     [System.Security.Cryptography.CryptoStream]$cryptoStream = New-Object System.Security.Cryptography.CryptoStream($ms, $mm.CreateEncryptor(), [System.Security.Cryptography.CryptoStreamMode]::Write)
@@ -476,20 +476,20 @@ Function DecryptFromBase64([string]$eText, [string]$mima)
 {
     [byte[]]$eBytes = [System.Convert]::FromBase64String($eText)
     [System.Security.Cryptography.SymmetricAlgorithm]$mm = [System.Security.Cryptography.Aes]::Create()
-    $mm.Key = [System.Security.Cryptography.MD5]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($mima))
+    $mm.Key = [System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($mima))
     $mm.IV = [byte[]]::new(16)
     [System.IO.MemoryStream]$ms = New-Object System.IO.MemoryStream
     [System.Security.Cryptography.CryptoStream]$cs = New-Object System.Security.Cryptography.CryptoStream($ms, $mm.CreateDecryptor(), [System.Security.Cryptography.CryptoStreamMode]::Write)
     $cs.Write($eBytes, 0, $eBytes.Length)
     $cs.FlushFinalBlock();
     [byte[]]$pBytes = $ms.ToArray()
-    [int]$pLen = $pBytes.Length - 16
+    [int]$pLen = $pBytes.Length - 32
     if ($pLen -lt 0){
         return "Invalid Length, no hash found!"
     }
-    $pHash = [byte[]]::new(16)
-    [System.Array]::Copy($pBytes, $pLen, $pHash, 0, 16)
-    [byte[]]$dHash = [System.Security.Cryptography.MD5]::Create().ComputeHash($pBytes, 0, $pLen)
+    $pHash = [byte[]]::new(32)
+    [System.Array]::Copy($pBytes, $pLen, $pHash, 0, 32)
+    [byte[]]$dHash = [System.Security.Cryptography.SHA256]::Create().ComputeHash($pBytes, 0, $pLen)
     $diff = Compare-Object $pHash $dHash
     if ($null -ne $diff){
         return "Invalid Hash!"
@@ -575,13 +575,10 @@ function Hide-Console {
     [Console.Window]::ShowWindow($consolePtr, 0) | out-null
 }
 
-if ($host.name -ne "ConsoleHost") {
-    $null = $syncHash.window.Dispatcher.InvokeAsync{$syncHash.Window.ShowDialog()}.Wait()
+if ($ShowConsole.IsPresent) {
+    Show-Console
 } else {
-    if ($ShowConsole.IsPresent) {
-        Show-Console
-    } else {
-        Hide-Console
-    }
-    $syncHash.window.ShowDialog() | Out-Null
+    Hide-Console
 }
+
+$syncHash.window.ShowDialog() | Out-Null
